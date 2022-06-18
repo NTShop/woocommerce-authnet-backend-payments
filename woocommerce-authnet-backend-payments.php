@@ -38,6 +38,8 @@ if ( ! class_exists( 'WC_Cardpay_Authnet' ) ) {
 	return;
 }
 
+const PLUGIN_FILE = __FILE__;
+
 /**
  * Loads main class file if WooCommerce is active on the site.
  *
