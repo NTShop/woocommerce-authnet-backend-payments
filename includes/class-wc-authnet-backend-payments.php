@@ -80,7 +80,7 @@ class WC_Authnet_Backend_Payments {
 
 		wp_enqueue_script( 'jquery-payment', plugins_url( '/assets/js/jquery-payment/jquery.payment.min.js', WC_PLUGIN_FILE ), array(), WC_VERSION, true );
 		wp_enqueue_script( 'credit-card-form', plugins_url( '/assets/js/frontend/credit-card-form.min.js', WC_PLUGIN_FILE ), array(), WC_VERSION, true );
-		wp_enqueue_script( 'wc-authnet-backend-script', plugin_dir_url( PLUGIN_FILE ) . 'assets/js/wc-authnet-backend-script.js', array( 'jquery' ), '1.0', true );
+		wp_enqueue_script( 'wc-authnet-backend-script', plugin_dir_url( WC_AUTHNET_PLUGIN_FILE ) . 'assets/js/wc-authnet-backend-script.js', array( 'jquery' ), '1.0', true );
 
 		?>
 		<?php echo wp_nonce_field( 'authnet_payment_nonce', '_authnet_nonce' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
