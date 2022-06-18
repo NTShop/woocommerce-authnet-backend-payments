@@ -8,8 +8,8 @@ The plugin is especially helpful for sites that take orders and only authorize t
 
 When viewing an individual order that has a status of "On Hold" or "Pending payment" a payment form will appear in the right sidebar.
 
-If CIM is enabled in the plugin and the order has as customer assigned and the customer has a user account with saved cards those cards will appear as choices for use to take a payment. The form also allows entering a new card to process a payment.
+If CIM is enabled in the plugin and the order has a customer assigned and the customer has a user account with saved cards those cards will appear as choices for use to take a payment (similar to how it is seen on the public checkout page). The form also allows entering a new card to process a payment.
 
-The payment amount will be for the amount of the order as seen in the order total. 
+The payment amount will be for the amount of the order as shown in the order total. 
 
 
