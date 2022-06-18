@@ -208,11 +208,13 @@ class WC_Authnet_Backend_Payments {
 			return;
 		}
 
-		if ( empty( $_POST['_authnet_nonce'] ) ) {
+		$nonce = isset( $_POST['_authnet_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['_authnet_nonce'] ) ) : false;
+
+		if ( empty( $nonce ) ) {
 			return;
 		}
 
-		if ( ! wp_verify_nonce( $_POST['_authnet_nonce'], 'authnet_payment_nonce' ) ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		if ( ! wp_verify_nonce( $nonce, 'authnet_payment_nonce' ) ) {
 			return;
 		}
 
@@ -230,8 +232,9 @@ class WC_Authnet_Backend_Payments {
 		try {
 			global $woocommerce;
 
-			// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
-			$order_id = absint( $_POST['post_ID'] );
+			// Nonce check has already been completed at this point.
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$order_id = isset( $_POST['post_ID'] ) ? absint( wp_unslash( $_POST['post_ID'] ) ) : false;
 
 			if ( empty( $order_id ) ) {
 				return;
@@ -248,8 +251,12 @@ class WC_Authnet_Backend_Payments {
 			$transaction_id = isset( $tran_meta['transaction_id'] ) ? $tran_meta['transaction_id'] : false;
 
 			if ( ! empty( $transaction_id ) ) {
-				$authnet  = new WC_Cardpay_Authnet_API();
-				$response = $authnet->void( $gateways['authnet'], $order, floatval( $_POST['authnet_order_total'] ) ); // phpcs:ignore
+				$authnet = new WC_Cardpay_Authnet_API();
+
+				// phpcs:ignore WordPress.Security.NonceVerification.Missing
+				$previous_amount = isset( $_POST['authnet_order_total'] ) ? sanitize_text_field( wp_unslash( $_POST['authnet_order_total'] ) ) : false;
+
+				$response = $authnet->void( $gateways['authnet'], $order, floatval( $previous_amount ) );
 
 				// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 				if ( isset( $response->transactionResponse->responseCode ) && '1' === $response->transactionResponse->responseCode ) {
@@ -261,9 +268,11 @@ class WC_Authnet_Backend_Payments {
 				}
 			}
 
-			if ( isset( $_POST['wc-authnet-payment-token'] ) && 'new' !== $_POST['wc-authnet-payment-token'] ) { //phpcs:ignore
-				$token_id = wc_clean( $_POST['wc-authnet-payment-token'] ); // phpcs:ignore
-				$card     = WC_Payment_Tokens::get( $token_id );
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$token_id = isset( $_POST['wc-authnet-payment-token'] ) ? sanitize_text_field( wp_unslash( $_POST['wc-authnet-payment-token'] ) ) : false;
+
+			if ( isset( $token_id ) && 'new' !== $token_id ) {
+				$card = WC_Payment_Tokens::get( $token_id );
 				// Return if card does not belong to order customer user.
 				if ( $card->get_user_id() !== $order->get_customer_id() ) {
 					$order->add_order_note( __( 'ERROR: The selected card does not belong to this user!', 'woocommerce-cardpay-authnet' ) );
@@ -356,7 +365,10 @@ class WC_Authnet_Backend_Payments {
 	public function authnet_save_card( $response, $exp_date ) {
 
 		// At this point the nonce has already been checked.
-		if ( empty( absint( $_POST['authnet_customer_id'] ) ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$customer_id = isset( $_POST['authnet_customer_id'] ) ? absint( sanitize_text_field( wp_unslash( $_POST['authnet_customer_id'] ) ) ) : false;
+
+		if ( empty( $customer_id ) ) {
 			return;
 		}
 
@@ -368,7 +380,7 @@ class WC_Authnet_Backend_Payments {
 			$token->set_last4( substr( $response->transactionResponse->accountNumber, -4 ) ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 			$token->set_expiry_month( substr( $exp_date, 0, 2 ) );
 			$token->set_expiry_year( '20' . substr( $exp_date, -2 ) );
-			$token->set_user_id( absint( $_POST['authnet_customer_id'] ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.NonceVerification.Missing
+			$token->set_user_id( $customer_id );
 			$token->save();
 		}
 	}
