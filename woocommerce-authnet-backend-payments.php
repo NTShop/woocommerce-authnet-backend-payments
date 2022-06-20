@@ -51,4 +51,4 @@ function wc_authnet_backend_load_if_wc_active() {
 	}
 	require_once dirname( __FILE__ ) . '/includes/class-wc-authnet-backend-payments.php';
 }
-add_action( 'init', 'wc_authnet_backend_load_if_wc_active', 0 );
+add_action( 'plugins_loaded', 'wc_authnet_backend_load_if_wc_active', 0 );
