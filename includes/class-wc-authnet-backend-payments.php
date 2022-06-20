@@ -4,7 +4,7 @@
  *
  * Orders must have a status of Pending Payment or On Hold before the payment form will appear in the sidebar.
  *
- * @package Authnet Backend Payments
+ * @package Authnet_Backend_Payments
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

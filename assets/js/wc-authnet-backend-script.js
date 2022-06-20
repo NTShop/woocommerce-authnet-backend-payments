@@ -3,7 +3,7 @@
  *
  * Shows or hides the payment form depending on whether an existing or new card is selected.
  *
- * @package Authnet Backend Payments
+ * @package Authnet_Backend_Payments
  */
 jQuery( document ).ready( function( $ ) {
 	$( '.wc-authnet-token' ).change( function() {
