@@ -1,6 +1,6 @@
 # Authorize.net Backend Payments for WooCommerce
 
-This plugins extends the functionality of the Authorize.net CIM for WooCommerce plugin by Cardpay Solutions to allow taking payments in the WP admin area while viewing or editing an order.
+This plugin extends the functionality of the Authorize.net CIM for WooCommerce plugin by Cardpay Solutions to allow taking payments in the WP admin area while viewing or editing an order. You must be using the Authorize.net CIM for WooCommerce plugin by Cardpay Solutions for this plugin for operate correctly.
 
 The plugin is especially helpful for sites that take orders and only authorize the payment and don't capture the payment immediately. This allows the store operator to adjust the order with additional products, modified prices, shipping costs, etc., and then process a new payment for the new order total.
 
